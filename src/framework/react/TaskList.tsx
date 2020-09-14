@@ -1,9 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { taskSelector, tasksActions } from "../redux/task.slice";
+import { tasksSelectors, tasksActions } from "../redux/task.slice";
+import { StoreState } from "../redux/store";
+import { ITask } from "../../core/entities";
 
 export const TaskList: React.FC = () => {
-  const taskList = useSelector(taskSelector);
+  const taskList = useSelector<StoreState, ITask[]>((state) =>
+    tasksSelectors.selectAll(state.tasks)
+  );
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -13,13 +17,18 @@ export const TaskList: React.FC = () => {
   return (
     <ul>
       {taskList.map((task) => {
-        const onToggleCompleted = () =>
-          dispatch(
-            tasksActions.toggleTaskCompleted({
-              taskId: task.id,
-              completed: !task.completed,
-            })
-          );
+        const onToggleCompleted = () => {
+          try {
+            dispatch(
+              tasksActions.toggleTaskCompleted({
+                taskId: task.id,
+                completed: !task.completed,
+              })
+            );
+          } catch (e) {
+            alert(e.message);
+          }
+        };
         return (
           <li key={task.id}>
             {task.description}

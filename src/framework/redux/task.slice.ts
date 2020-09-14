@@ -1,17 +1,21 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { StoreState } from "./store";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  createEntityAdapter,
+  EntityState,
+} from "@reduxjs/toolkit";
 import { ITask } from "../../core/entities";
 import {
   createNewTaskInteractor,
   toggleTaskCompletedInteractor,
   fetchUserTasksInteractor,
 } from "../../core/useCases";
-import { AppServices } from './store';
+import { AppServices } from "./store";
 
 let taskId = 0;
-const initialState: TaskMap = {};
 
-export type TaskMap = { [K: number]: ITask };
+export type TaskState = EntityState<ITask>;
 
 interface ToggleTaskCompletedPayload {
   taskId: number;
@@ -21,60 +25,44 @@ interface ToggleTaskCompletedPayload {
 const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
   async (userId: number, thunkApi) => {
-    const appServices = thunkApi.extra as AppServices
-    const tasks = await fetchUserTasksInteractor(appServices.fetchUserTasksService, userId);
-    return tasks.reduce((taskMap, task) => {
-      taskMap[task.id] = task;
-      return taskMap;
-    }, {} as TaskMap);
-  },
+    const appServices = thunkApi.extra as AppServices;
+    return fetchUserTasksInteractor(appServices.fetchUserTasksService, userId);
+  }
 );
+
+const tasksAdapter = createEntityAdapter<ITask>();
 
 const tasks = createSlice({
   name: "tasks",
-  initialState,
+  initialState: tasksAdapter.getInitialState(),
   reducers: {
     createTask: {
-      reducer: (state: TaskMap, action: PayloadAction<{ id: number, description: string }, string>) => {
-        try {
-          const task = createNewTaskInteractor(action.payload.id, action.payload.description)
-          state[task.id] = task;
-        } catch (e) {
-          alert(e.message)
-        }
-      },
-      prepare: (description: string) => {
-        return {
-          payload: {
-            id: taskId += 1,
-            description,
-          },
-        };
-      },
+      prepare: (description: string) => ({
+        payload: createNewTaskInteractor((taskId += 1), description),
+      }),
+      reducer: (state, action: PayloadAction<ITask>) =>
+        tasksAdapter.upsertOne(state, action.payload),
     },
     toggleTaskCompleted: (
-      state: TaskMap,
-      action: PayloadAction<ToggleTaskCompletedPayload, string>
+      state,
+      action: PayloadAction<ToggleTaskCompletedPayload>
     ) => {
-      const task = state[action.payload.taskId];
-      state[task.id] = toggleTaskCompletedInteractor(task, action.payload.completed);
+      const task = tasksSelectors.selectById(state, action.payload.taskId);
+      if (!task) throw Error("Task not found");
+      tasksAdapter.updateOne(state, {
+        id: action.payload.taskId,
+        changes: toggleTaskCompletedInteractor(task, action.payload.completed),
+      });
     },
   },
   extraReducers: {
-    [fetchUserTasks.fulfilled.toString()]: (
-      _: TaskMap,
-      action: PayloadAction<TaskMap>
-    ) => {
-      return action.payload;
-    },
+    [fetchUserTasks.fulfilled.toString()]: tasksAdapter.setAll,
   },
 });
 
-export const taskSelector = (store: StoreState): ITask[] =>
-  Object.values(store.tasks);
-
+export const tasksSelectors = tasksAdapter.getSelectors();
 export const tasksReducer = tasks.reducer;
 export const tasksActions = {
   ...tasks.actions,
   fetchUserTasks,
-}
+};

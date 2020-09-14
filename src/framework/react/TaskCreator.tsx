@@ -9,8 +9,12 @@ export const TaskCreator: React.FC = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        dispatch(tasksActions.createTask(description));
-        setDescription("");
+        try {
+          dispatch(tasksActions.createTask(description));
+          setDescription("");
+        } catch (error) {
+          alert(error.message);
+        }
       }}
     >
       <input
