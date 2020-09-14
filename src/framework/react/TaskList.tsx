@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { taskSelector, tasks, fetchUserTasks } from "../redux/task.slice";
+import { taskSelector, tasksActions } from "../redux/task.slice";
 
 export const TaskList: React.FC = () => {
   const taskList = useSelector(taskSelector);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchUserTasks(1));
+    dispatch(tasksActions.fetchUserTasks(1));
   }, [dispatch]);
 
   return (
@@ -15,7 +15,7 @@ export const TaskList: React.FC = () => {
       {taskList.map((task) => {
         const onToggleCompleted = () =>
           dispatch(
-            tasks.actions.toggleTaskCompleted({
+            tasksActions.toggleTaskCompleted({
               taskId: task.id,
               completed: !task.completed,
             })

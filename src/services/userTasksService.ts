@@ -1,5 +1,5 @@
 import { ITask } from "../core/entities";
-import { fetchUserTasksService } from "../core/useCases/fetchUserTasks";
+import { fetchUserTasksService } from "../core/useCases";
 
 interface ITodoResponse {
   userId: number;
@@ -8,11 +8,16 @@ interface ITodoResponse {
   completed: boolean;
 }
 
-export const tasksRepository: fetchUserTasksService = async () => {
+async function userTasksAPIRepository() {
   const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
-  const result = await fetch(tasksUrl);
-  if (!result.ok) throw Error(result.statusText);
-  const response = await result.json();
+  const result = await fetch( tasksUrl );
+  if ( !result.ok )
+    throw Error( result.statusText );
+  return result.json();
+}
+
+export const userTasksService: fetchUserTasksService = async () => {
+  const response = await userTasksAPIRepository();
   const mappedTasks: ITask[] = response.map((todo: ITodoResponse) => ({
     id: todo.id,
     completed: todo.completed,
@@ -20,3 +25,4 @@ export const tasksRepository: fetchUserTasksService = async () => {
   }));
   return mappedTasks;
 };
+

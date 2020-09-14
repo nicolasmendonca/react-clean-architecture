@@ -1,5 +1,5 @@
 import React from "react";
-import { tasks } from "../redux/task.slice";
+import { tasksActions } from "../redux/task.slice";
 import { useDispatch } from "react-redux";
 
 export const TaskCreator: React.FC = () => {
@@ -9,7 +9,7 @@ export const TaskCreator: React.FC = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        dispatch(tasks.actions.createTask(description));
+        dispatch(tasksActions.createTask(description));
         setDescription("");
       }}
     >

@@ -3,25 +3,26 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { StoreState } from "./store";
 import { ITask } from "../../core/entities";
 import {
-  createNewTask,
-  toggleTaskCompleted,
-  fetchUserTasks as fetchUserTasksInteractor,
+  createNewTaskInteractor,
+  toggleTaskCompletedInteractor,
+  fetchUserTasksInteractor,
 } from "../../core/useCases";
-import { tasksRepository } from "../../repositories/tasksRepository";
+import { userTasksService } from "../../services/userTasksService";
 
 let taskId = 0;
 const initialState: TaskMap = {};
 
 export type TaskMap = { [K: number]: ITask };
+
 interface ToggleTaskCompletedPayload {
   taskId: number;
   completed: boolean;
 }
 
-export const fetchUserTasks = createAsyncThunk(
+const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
   async (userId: number): Promise<TaskMap> => {
-    const tasks = await fetchUserTasksInteractor(tasksRepository, userId);
+    const tasks = await fetchUserTasksInteractor(userTasksService, userId);
     return tasks.reduce((taskMap, task) => {
       taskMap[task.id] = task;
       return taskMap;
@@ -29,18 +30,25 @@ export const fetchUserTasks = createAsyncThunk(
   }
 );
 
-export const tasks = createSlice({
+const tasks = createSlice({
   name: "tasks",
   initialState,
   reducers: {
     createTask: {
-      reducer: (state: TaskMap, action: PayloadAction<ITask, string>) => {
-        state[action.payload.id] = action.payload;
+      reducer: (state: TaskMap, action: PayloadAction<{ id: number, description: string }, string>) => {
+        try {
+          const task = createNewTaskInteractor(action.payload.id, action.payload.description)
+          state[task.id] = task;
+        } catch (e) {
+          alert(e.message)
+        }
       },
       prepare: (description: string) => {
-        const task = createNewTask((taskId += 1), description);
         return {
-          payload: task,
+          payload: {
+            id: taskId += 1,
+            description,
+          },
         };
       },
     },
@@ -49,7 +57,7 @@ export const tasks = createSlice({
       action: PayloadAction<ToggleTaskCompletedPayload, string>
     ) => {
       const task = state[action.payload.taskId];
-      state[task.id] = toggleTaskCompleted(task, action.payload.completed);
+      state[task.id] = toggleTaskCompletedInteractor(task, action.payload.completed);
     },
   },
   extraReducers: {
@@ -66,3 +74,7 @@ export const taskSelector = (store: StoreState): ITask[] =>
   Object.values(store.tasks);
 
 export const tasksReducer = tasks.reducer;
+export const tasksActions = {
+  ...tasks.actions,
+  fetchUserTasks,
+}
