@@ -8,7 +8,7 @@ interface ITodoResponse {
   completed: boolean;
 }
 
-async function userTasksAPIRepository() {
+async function userTasksAPIRepository(): Promise<ITodoResponse[]> {
   const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
   const result = await fetch( tasksUrl );
   if ( !result.ok )
@@ -18,7 +18,7 @@ async function userTasksAPIRepository() {
 
 export const userTasksService: fetchUserTasksService = async () => {
   const response = await userTasksAPIRepository();
-  const mappedTasks: ITask[] = response.map((todo: ITodoResponse) => ({
+  const mappedTasks: ITask[] = response.map((todo) => ({
     id: todo.id,
     completed: todo.completed,
     description: todo.title,
