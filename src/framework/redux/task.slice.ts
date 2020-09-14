@@ -1,4 +1,3 @@
-import {} from "immer";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { StoreState } from "./store";
 import { ITask } from "../../core/entities";
@@ -7,7 +6,7 @@ import {
   toggleTaskCompletedInteractor,
   fetchUserTasksInteractor,
 } from "../../core/useCases";
-import { userTasksService } from "../../services/userTasksService";
+import { AppServices } from './store';
 
 let taskId = 0;
 const initialState: TaskMap = {};
@@ -21,13 +20,14 @@ interface ToggleTaskCompletedPayload {
 
 const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
-  async (userId: number): Promise<TaskMap> => {
-    const tasks = await fetchUserTasksInteractor(userTasksService, userId);
+  async (userId: number, thunkApi) => {
+    const appServices = thunkApi.extra as AppServices
+    const tasks = await fetchUserTasksInteractor(appServices.fetchUserTasksService, userId);
     return tasks.reduce((taskMap, task) => {
       taskMap[task.id] = task;
       return taskMap;
     }, {} as TaskMap);
-  }
+  },
 );
 
 const tasks = createSlice({
