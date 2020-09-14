@@ -1,23 +1,9 @@
 import { ITask } from "../core/entities";
 import { fetchUserTasksService } from "../core/useCases";
+import { UserTasksRepository } from '../repositories/userTasks';
 
-interface ITodoResponse {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
-
-async function userTasksAPIRepository(): Promise<ITodoResponse[]> {
-  const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
-  const result = await fetch( tasksUrl );
-  if ( !result.ok )
-    throw Error( result.statusText );
-  return result.json();
-}
-
-export const userTasksService: fetchUserTasksService = async () => {
-  const response = await userTasksAPIRepository();
+export const createUserTasksService = (userTasksRepository: UserTasksRepository): fetchUserTasksService => async () => {
+  const response = await userTasksRepository();
   const mappedTasks: ITask[] = response.map((todo) => ({
     id: todo.id,
     completed: todo.completed,

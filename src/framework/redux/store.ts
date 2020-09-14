@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { userTasksService } from '../../services'
+import { createUserTasksService } from '../../services'
+import { userTasksAPIRepository } from '../../repositories/userTasks'
 import { tasksReducer, TaskMap } from "./task.slice";
 import { fetchUserTasksService } from '../../core/useCases';
 
@@ -31,7 +32,7 @@ export const createStore = (appServices: AppServices) => {
 }
 
 export const store = createStore({
-  fetchUserTasksService: userTasksService
+  fetchUserTasksService: createUserTasksService(userTasksAPIRepository)
 });
 
 export type AppDispatch = typeof store.dispatch;
