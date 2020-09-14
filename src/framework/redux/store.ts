@@ -1,18 +1,19 @@
-import { createStore, combineReducers } from 'redux';
-import { tasks } from './task/task.reducer';
-import { Task } from '../../core/entities/Task';
+import { configureStore } from "@reduxjs/toolkit";
+import { tasksReducer, TaskMap } from "./task.slice";
 
 export interface StoreState {
-  tasks: Task[];
+  tasks: TaskMap;
 }
 
-const initialState: StoreState = {
-  tasks: [],
+const preloadedState: StoreState = {
+  tasks: {},
 };
 
-export const store = createStore(
-  combineReducers({
-    tasks,
-  }),
-  initialState as any
-);
+export const store = configureStore({
+  reducer: {
+    tasks: tasksReducer,
+  },
+  preloadedState,
+});
+
+export type AppDispatch = typeof store.dispatch;

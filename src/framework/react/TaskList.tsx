@@ -1,23 +1,35 @@
-import React from 'react';
-import { useTask } from '../react-redux/task/useTask';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { taskSelector, tasks, fetchUserTasks } from "../redux/task.slice";
 
 export const TaskList: React.FC = () => {
-  const { taskList, toggleCompleted } = useTask();
+  const taskList = useSelector(taskSelector);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(fetchUserTasks(1));
+  }, [dispatch]);
+
   return (
     <ul>
       {taskList.map((task) => {
         const onToggleCompleted = () =>
-          toggleCompleted(task.id, !task.completed);
+          dispatch(
+            tasks.actions.toggleTaskCompleted({
+              taskId: task.id,
+              completed: !task.completed,
+            })
+          );
         return (
           <li key={task.id}>
             {task.description}
             {task.completed ? (
               <button type="button" onClick={onToggleCompleted}>
-                Unmark as completed
+                Pending
               </button>
             ) : (
               <button type="button" onClick={onToggleCompleted}>
-                Mark as completed
+                Completed
               </button>
             )}
           </li>
