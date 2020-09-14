@@ -5,7 +5,7 @@ import { ITask } from "../../core/entities";
 import {
   createNewTask,
   toggleTaskCompleted,
-  createFetchUserTasks,
+  fetchUserTasks as fetchUserTasksInteractor,
 } from "../../core/useCases";
 import { tasksRepository } from "../../repositories/tasksRepository";
 
@@ -21,8 +21,7 @@ interface ToggleTaskCompletedPayload {
 export const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
   async (userId: number): Promise<TaskMap> => {
-    const userTasksFetcher = createFetchUserTasks(tasksRepository);
-    const tasks = await userTasksFetcher(userId);
+    const tasks = await fetchUserTasksInteractor(tasksRepository, userId);
     return tasks.reduce((taskMap, task) => {
       taskMap[task.id] = task;
       return taskMap;
