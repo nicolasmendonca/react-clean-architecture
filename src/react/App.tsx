@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Provider } from "react-redux";
-import { createStore } from "../core/redux/store";
-import { createUserTasksService } from "../core/services";
+import { createStore, createUserTasksService } from "../core";
 import { userTasksAPIRepository } from "../repositories/userTasksFetch";
 import { StoreType } from "./reduxStore";
 

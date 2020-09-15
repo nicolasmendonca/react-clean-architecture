@@ -1,8 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { tasksSelectors, tasksActions } from "../core/redux/task.slice";
-import { StoreState } from "../core/redux/store";
-import { ITask } from "../core/entities";
+import { ITask, StoreState, tasksSelectors, tasksActions } from "../core";
 
 export const TaskList: React.FC = () => {
   const taskList = useSelector<StoreState, ITask[]>((state) =>

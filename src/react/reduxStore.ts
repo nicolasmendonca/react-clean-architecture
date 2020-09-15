@@ -1,5 +1,4 @@
-import { createStore } from "../core/redux/store";
-import { createUserTasksService } from "../core/services";
+import { createStore, createUserTasksService } from "../core";
 import { userTasksAPIRepository } from "../repositories/userTasksFetch";
 
 export const store = createStore({

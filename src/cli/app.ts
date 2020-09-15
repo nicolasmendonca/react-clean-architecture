@@ -1,6 +1,9 @@
-import { createUserTasksService } from "../core/services/userTasksService";
-import { tasksActions, tasksSelectors } from "../core/redux/task.slice";
-import { createStore } from "../core/redux/store";
+import {
+  createUserTasksService,
+  tasksActions,
+  tasksSelectors,
+  createStore,
+} from "../core";
 import { userTasksAPIRepository } from "../repositories/userTasksAxios";
 
 const store = createStore({

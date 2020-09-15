@@ -1,5 +1,5 @@
 import React from "react";
-import { tasksActions } from "../core/redux/task.slice";
+import { tasksActions } from "../core";
 import { useDispatch } from "react-redux";
 
 export const TaskCreator: React.FC = () => {

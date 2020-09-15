@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { tasksReducer, TaskState } from "./task.slice";
-import { fetchUserTasksService } from "../../core/useCases";
+import { tasksReducer, TaskState } from "./tasks";
+import { fetchUserTasksService } from "../../core";
 
 const createEntitiesEmptyState = () => ({
   ids: [],

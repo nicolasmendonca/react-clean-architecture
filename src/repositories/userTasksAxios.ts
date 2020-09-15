@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UserTasksRepository } from "../core/services";
+import { UserTasksRepository } from "../core";
 
 export const userTasksAPIRepository: UserTasksRepository = async () => {
   const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
