@@ -1,5 +1,13 @@
-import { fetchUserTasksService } from "../core/useCases";
-import { UserTasksRepository } from "../repositories/userTasks";
+import { fetchUserTasksService } from "../useCases";
+
+interface ITodoResponse {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+export type UserTasksRepository = () => Promise<ITodoResponse[]>;
 
 export const createUserTasksService = (
   userTasksRepository: UserTasksRepository

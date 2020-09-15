@@ -5,12 +5,12 @@ import {
   createEntityAdapter,
   EntityState,
 } from "@reduxjs/toolkit";
-import { ITask } from "../../core/entities";
+import { ITask } from "../entities";
 import {
   createNewTaskInteractor,
   toggleTaskCompletedInteractor,
   fetchUserTasksInteractor,
-} from "../../core/useCases";
+} from "../useCases";
 import { AppServices } from "./store";
 
 let taskId = 0;

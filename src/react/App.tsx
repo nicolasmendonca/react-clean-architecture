@@ -1,17 +1,19 @@
 import * as React from "react";
 import { Provider } from "react-redux";
-import { createStore } from "../redux/store";
+import { createStore } from "../core/redux/store";
+import { createUserTasksService } from "../core/services";
+import { userTasksAPIRepository } from "../repositories/userTasksFetch";
+import { StoreType } from "./reduxStore";
+
 import { TaskCreator } from "./TaskCreator";
 import { TaskList } from "./TaskList";
 import "./styles.css";
-import { createUserTasksService } from "../../services";
-import { userTasksAPIRepository } from "../../repositories/userTasks";
 
 export const store = createStore({
   fetchUserTasksService: createUserTasksService(userTasksAPIRepository),
 });
 
-export default function App() {
+const App: React.FC<{ store: StoreType }> = ({ store }) => {
   return (
     <Provider store={store}>
       <div className="App">
@@ -20,4 +22,6 @@ export default function App() {
       </div>
     </Provider>
   );
-}
+};
+
+export default App;

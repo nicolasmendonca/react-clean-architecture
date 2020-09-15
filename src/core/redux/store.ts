@@ -2,12 +2,17 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { tasksReducer, TaskState } from "./task.slice";
 import { fetchUserTasksService } from "../../core/useCases";
 
+const createEntitiesEmptyState = () => ({
+  ids: [],
+  entities: {},
+});
+
 export interface StoreState {
   tasks: TaskState;
 }
 
 const preloadedState: StoreState = {
-  tasks: { ids: [], entities: {} },
+  tasks: createEntitiesEmptyState(),
 };
 
 export interface AppServices {
