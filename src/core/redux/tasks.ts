@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import { ITask } from "../entities";
 import {
-  createNewTaskInteractor,
+  createTaskInteractor,
   toggleTaskCompletedInteractor,
   fetchUserTasksInteractor,
 } from "../useCases";
@@ -38,7 +38,7 @@ const tasks = createSlice({
   reducers: {
     createTask: {
       prepare: (description: string) => ({
-        payload: createNewTaskInteractor((taskId += 1), description),
+        payload: createTaskInteractor((taskId += 1), description),
       }),
       reducer: (state, action: PayloadAction<ITask>) =>
         tasksAdapter.upsertOne(state, action.payload),
