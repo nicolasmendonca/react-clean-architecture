@@ -1,4 +1,4 @@
-import { fetchUserTasksService } from "../useCases";
+import { FetchUserTasksService } from "../useCases";
 
 interface ITodoResponse {
   userId: number;
@@ -9,9 +9,9 @@ interface ITodoResponse {
 
 export type UserTasksRepository = () => Promise<ITodoResponse[]>;
 
-export const createUserTasksService = (
+export const createFetchUserTasksService = (
   userTasksRepository: UserTasksRepository
-): fetchUserTasksService => async () => {
+): FetchUserTasksService => async () => {
   const response = await userTasksRepository();
   return response.map((todo) => ({
     id: todo.id,

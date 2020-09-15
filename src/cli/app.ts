@@ -1,17 +1,20 @@
 import {
-  createUserTasksService,
+  createFetchUserTasksService,
   tasksActions,
   tasksSelectors,
   createStore,
+  // fetchUserTasksInteractor,
+  // toggleTaskCompletedInteractor,
 } from "../core";
 import { userTasksAPIRepository } from "../repositories/userTasksAxios";
 
-const store = createStore({
-  fetchUserTasksService: createUserTasksService(userTasksAPIRepository),
-});
-
+// WITH REDUX
 async function main() {
+  const store = createStore({
+    fetchUserTasksService: createFetchUserTasksService(userTasksAPIRepository),
+  });
   await store.dispatch(tasksActions.fetchUserTasks(1));
+  console.warn(`fetched ${store.getState().tasks.ids.length} tasks`)
   const task = tasksSelectors.selectById(store.getState().tasks, 1);
   console.warn(task);
 
@@ -25,5 +28,15 @@ async function main() {
   const updatedTask = tasksSelectors.selectById(store.getState().tasks, 1);
   console.warn(updatedTask);
 }
+
+// WITHOUT REDUX
+// async function main() {
+//   const tasks = await fetchUserTasksInteractor(createFetchUserTasksService(userTasksAPIRepository), 1);
+//   console.warn(`fetched ${tasks.length} tasks`)
+//   const task1 = tasks.find(task => task.id === 1)!;
+//   console.warn(task1);
+//   const updatedTask = toggleTaskCompletedInteractor(task1, true);
+//   console.warn(updatedTask)
+// }
 
 main();
