@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Switch from "react-switch";
 import { ITask, StoreState, tasksSelectors, tasksActions } from "@app/core";
 
 export const TaskList: React.FC = () => {
@@ -8,40 +9,30 @@ export const TaskList: React.FC = () => {
   );
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    dispatch(tasksActions.fetchUserTasks(1));
-  }, [dispatch]);
-
   return (
-    <ul>
-      {taskList.map((task) => {
-        const onToggleCompleted = () => {
-          try {
-            dispatch(
-              tasksActions.toggleTaskCompleted({
-                taskId: task.id,
-                completed: !task.completed,
-              })
-            );
-          } catch (e) {
-            alert(e.message);
-          }
-        };
-        return (
-          <li key={task.id}>
-            {task.description}
-            {task.completed ? (
-              <button type="button" onClick={onToggleCompleted}>
-                Completed
-              </button>
-            ) : (
-              <button type="button" onClick={onToggleCompleted}>
-                Pending
-              </button>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+    <div className="TasksList">
+      <ul>
+        {taskList.map((task) => {
+          const onToggleCompleted = () => {
+            try {
+              dispatch(
+                tasksActions.toggleTaskCompleted({
+                  taskId: task.id,
+                  completed: !task.completed,
+                })
+              );
+            } catch (e) {
+              alert(e.message);
+            }
+          };
+          return (
+            <li key={task.id}>
+              <Switch onChange={onToggleCompleted} checked={task.completed} />
+              {task.description}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 };

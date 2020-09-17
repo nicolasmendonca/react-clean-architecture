@@ -1,16 +1,58 @@
+body {
+  background-color: rgb(241, 241, 241);
+}
+
 .App {
   font-family: sans-serif;
+}
+
+.TaskCreator {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.TaskCreator__input-container {
+  position: relative;
+  height: 60px;
+}
+
+.TaskCreator__input-error {
+  color: red;
+}
+
+.TaskCreator button {
+  padding: 0.5em 1em;
+  background: linear-gradient(rgb(150, 255, 51), rgb(200, 235, 168));
+  border: none;
+  border-radius: 15px;
+  color: black;
+}
+
+input {
+  width: 400px;
+  padding: 0.5em 1em;
+  border-radius: 15px;
+  border: 1px solid rgb(51, 187, 255);
+}
+
+input:focus {
+  outline: none;
+  box-shadow: rgb(51, 187, 255) 0 0 2px 3px;
 }
 
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 800px;
 }
 
 li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  margin: 1em 0;
+}
+
+li > * {
+  margin-right: 1em;
 }
