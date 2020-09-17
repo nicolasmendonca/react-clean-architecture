@@ -1,0 +1,16 @@
+{
+  "name": "@app/cli-without-redux",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node ./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@app/core": "1.0.0",
+    "@app/repositories": "1.0.0"
+  }
+}

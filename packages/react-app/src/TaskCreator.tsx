@@ -1,5 +1,5 @@
 import React from "react";
-import { tasksActions } from "../core";
+import { tasksActions } from "@app/core";
 import { useDispatch } from "react-redux";
 
 export const TaskCreator: React.FC = () => {
@@ -10,7 +10,7 @@ export const TaskCreator: React.FC = () => {
       onSubmit={(e) => {
         e.preventDefault();
         try {
-          dispatch(tasksActions.createTask(description));
+          dispatch(tasksActions.createTask({ description }));
           setDescription("");
         } catch (error) {
           alert(error.message);

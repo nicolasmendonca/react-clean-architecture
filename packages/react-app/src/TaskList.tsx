@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ITask, StoreState, tasksSelectors, tasksActions } from "../core";
+import { ITask, StoreState, tasksSelectors, tasksActions } from "@app/core";
 
 export const TaskList: React.FC = () => {
   const taskList = useSelector<StoreState, ITask[]>((state) =>
@@ -32,11 +32,11 @@ export const TaskList: React.FC = () => {
             {task.description}
             {task.completed ? (
               <button type="button" onClick={onToggleCompleted}>
-                Pending
+                Completed
               </button>
             ) : (
               <button type="button" onClick={onToggleCompleted}>
-                Completed
+                Pending
               </button>
             )}
           </li>

@@ -1,6 +1,6 @@
-import { UserTasksRepository } from "../core";
+import { UserTasksRepository } from "@app/core";
 
-export const userTasksAPIRepository: UserTasksRepository = async () => {
+export const userTasksFetchRepository: UserTasksRepository = async () => {
   const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
   const result = await fetch(tasksUrl);
   if (!result.ok) throw Error(result.statusText);

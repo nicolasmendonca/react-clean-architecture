@@ -22,6 +22,10 @@ interface ToggleTaskCompletedPayload {
   completed: boolean;
 }
 
+interface CreateTaskActionPayload {
+  description: string;
+}
+
 const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
   async (userId: number, thunkApi) => {
@@ -36,12 +40,11 @@ const tasks = createSlice({
   name: "tasks",
   initialState: tasksAdapter.getInitialState(),
   reducers: {
-    createTask: {
-      prepare: (description: string) => ({
-        payload: createTaskInteractor((taskId += 1), description),
-      }),
-      reducer: (state, action: PayloadAction<ITask>) =>
-        tasksAdapter.upsertOne(state, action.payload),
+    createTask: (state, action: PayloadAction<CreateTaskActionPayload>) => {
+      return tasksAdapter.upsertOne(
+        state,
+        createTaskInteractor((taskId += 1), action.payload.description)
+      );
     },
     toggleTaskCompleted: (
       state,
@@ -56,7 +59,7 @@ const tasks = createSlice({
     },
   },
   extraReducers: {
-    [fetchUserTasks.fulfilled.toString()]: tasksAdapter.setAll,
+    [fetchUserTasks.fulfilled.type]: tasksAdapter.setAll,
   },
 });
 
@@ -64,5 +67,6 @@ export const tasksSelectors = tasksAdapter.getSelectors();
 export const tasksReducer = tasks.reducer;
 export const tasksActions = {
   ...tasks.actions,
+  toggleTaskCompleted: tasks.actions.toggleTaskCompleted,
   fetchUserTasks,
 };

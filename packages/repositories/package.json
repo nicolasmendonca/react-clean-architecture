@@ -1,0 +1,23 @@
+{
+  "name": "@app/repositories",
+  "version": "1.0.0",
+  "main": "dist",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": [
+    "dist/types"
+  ],
+  "dependencies": {
+    "@app/core": "1.0.0",
+    "axios": "^0.20.0",
+    "ts-loader": "^8.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

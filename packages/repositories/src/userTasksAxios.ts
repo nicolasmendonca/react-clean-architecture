@@ -1,7 +1,7 @@
 import axios from "axios";
-import { UserTasksRepository } from "../core";
+import { UserTasksRepository } from "@app/core";
 
-export const userTasksAPIRepository: UserTasksRepository = async () => {
+export const userTasksAxiosRepository: UserTasksRepository = async () => {
   const tasksUrl = `https://jsonplaceholder.typicode.com/todos`;
   const result = await axios(tasksUrl);
   if (result.status < 200 || result.status >= 300)
