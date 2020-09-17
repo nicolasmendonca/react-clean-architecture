@@ -2,6 +2,18 @@ body {
   background-color: rgb(241, 241, 241);
 }
 
+h1 {
+  font-family: sans-serif;
+}
+
+h2 {
+  font-family: sans-serif;
+  font-size: 12px;
+  color: gray;
+  top: 50%;
+  right: 0;
+}
+
 .App {
   font-family: sans-serif;
 }
@@ -27,6 +39,7 @@ body {
   border: none;
   border-radius: 15px;
   color: black;
+  cursor: pointer;
 }
 
 input {

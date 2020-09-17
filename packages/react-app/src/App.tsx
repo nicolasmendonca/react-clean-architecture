@@ -15,6 +15,8 @@ export const store = createStore({
 const App: React.FC<{ store: StoreType }> = ({ store }) => {
   return (
     <Provider store={store}>
+      <h1>Todo App </h1>
+      <h2>(yes, another one)</h2>
       <div className="App">
         <TaskCreator />
         <TaskList />
