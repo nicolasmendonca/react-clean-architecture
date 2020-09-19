@@ -1,6 +1,6 @@
 import { FetchUserTasksService } from "../useCases";
 
-interface ITodoResponse {
+export interface ITodoResponse {
   userId: number;
   id: number;
   title: string;

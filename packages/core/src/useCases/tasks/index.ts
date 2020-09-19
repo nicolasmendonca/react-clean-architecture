@@ -1,3 +1,3 @@
-export * from "./createTask.interactor";
-export * from "./fetchUserTasks.interactor";
-export * from "./toggleCompleted.interactor";
+export * from "./createTaskInteractor";
+export * from "./fetchUserTasksInteractor";
+export * from "./toggleCompletedInteractor";
