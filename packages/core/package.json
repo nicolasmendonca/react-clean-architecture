@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "watch": "tsc --watch",
     "build": "rimraf dist && tsc",
     "test": "jest"
   },
