@@ -19,14 +19,22 @@ export interface AppServices {
   fetchUserTasksService: FetchUserTasksService;
 }
 
-export const createStore = (appServices: AppServices) => {
+export const createStore = (
+  appServices: AppServices,
+  extraReducers: any = {},
+  extraArguments: any = {}
+) => {
   const middleware = getDefaultMiddleware({
     thunk: {
-      extraArgument: appServices,
+      extraArgument: {
+        ...extraArguments,
+        ...appServices,
+      },
     },
   });
   return configureStore({
     reducer: {
+      ...extraReducers,
       tasks: tasksReducer,
     },
     preloadedState,
