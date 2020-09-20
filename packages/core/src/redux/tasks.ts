@@ -22,8 +22,13 @@ interface ToggleTaskCompletedPayload {
   completed: boolean;
 }
 
-interface CreateTaskActionPayload {
+interface CreateTaskPrepareActionPayload {
   description: string;
+  deadline?: Date;
+}
+
+interface CreateTaskActionPayload extends CreateTaskPrepareActionPayload {
+  id: number;
 }
 
 const fetchUserTasks = createAsyncThunk(
@@ -40,14 +45,24 @@ const tasks = createSlice({
   name: "tasks",
   initialState: tasksAdapter.getInitialState(),
   reducers: {
-    createTask: (state, action: PayloadAction<CreateTaskActionPayload>) => {
-      return tasksAdapter.upsertOne(
-        state,
-        createTaskInteractor({
-          id: taskId += 1,
-          description: action.payload.description,
-        })
-      );
+    createTask: {
+      prepare: (payload: CreateTaskPrepareActionPayload) => {
+        return {
+          payload: {
+            id: taskId += 1,
+            ...payload,
+          },
+        };
+      },
+      reducer: (state, action: PayloadAction<CreateTaskActionPayload>) => {
+        return tasksAdapter.upsertOne(
+          state,
+          createTaskInteractor({
+            id: taskId += 1,
+            ...action.payload,
+          })
+        );
+      },
     },
     toggleTaskCompleted: (
       state,
