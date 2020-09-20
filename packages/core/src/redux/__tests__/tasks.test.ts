@@ -6,11 +6,12 @@ type CreatedStore = ReturnType<typeof createStore>;
 
 describe("tasks redux slice", () => {
   const task1Description = "Task 1 description";
-  const fetchUserTasksService = jest
-    .fn()
-    .mockResolvedValue([
-      createTaskInteractor(1, "task returned from http response"),
-    ]);
+  const fetchUserTasksService = jest.fn().mockResolvedValue([
+    createTaskInteractor({
+      id: 1,
+      description: "task returned from http response",
+    }),
+  ]);
   let store: CreatedStore;
   beforeEach(() => {
     store = createStore({

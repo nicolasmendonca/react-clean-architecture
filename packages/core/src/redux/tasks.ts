@@ -43,7 +43,10 @@ const tasks = createSlice({
     createTask: (state, action: PayloadAction<CreateTaskActionPayload>) => {
       return tasksAdapter.upsertOne(
         state,
-        createTaskInteractor((taskId += 1), action.payload.description)
+        createTaskInteractor({
+          id: taskId += 1,
+          description: action.payload.description,
+        })
       );
     },
     toggleTaskCompleted: (
