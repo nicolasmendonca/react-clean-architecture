@@ -39,7 +39,8 @@ const fetchUserTasks = createAsyncThunk(
   "tasks/fetchUserTasks",
   async (userId: number, thunkApi) => {
     const appServices = thunkApi.extra as AppServices;
-    return fetchUserTasksInteractor(appServices.fetchUserTasksService, userId);
+    const tasks = await fetchUserTasksInteractor(appServices.fetchUserTasksService, userId);
+    return tasks;
   }
 );
 
