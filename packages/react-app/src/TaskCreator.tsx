@@ -1,21 +1,23 @@
 import React from "react";
-import { tasksActions } from "@app/core";
-import { useDispatch } from "react-redux";
+import { createTaskInteractor, ITask } from "@app/core";
 
-export const TaskCreator: React.FC = () => {
-  const [description, setDescription] = React.useState("");
-  const dispatch = useDispatch();
+let taskId = 0;
+
+interface ITaskCreatorProps {
+  onTaskCreated: (task: ITask) => void;
+}
+
+export const TaskCreator: React.FC<ITaskCreatorProps> = ({
+  onTaskCreated
+}) => {
+  const [description, setDescription] = React.useState('')
   return (
     <form
       className="flex mt-4"
       onSubmit={(e) => {
         e.preventDefault();
-        try {
-          dispatch(tasksActions.createTask({ description }));
-          setDescription("");
-        } catch (caughtError) {
-          alert(caughtError.message)
-        }
+        onTaskCreated(createTaskInteractor({ id: taskId += 1, description }))
+        setDescription('');
       }}
     >
       <input

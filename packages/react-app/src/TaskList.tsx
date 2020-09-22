@@ -1,28 +1,22 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { ITask, StoreState, tasksSelectors, tasksActions } from "@app/core"
+import { ITask } from "@app/core"
 
-export const TaskList: React.FC = () => {
-  const taskList = useSelector<StoreState, ITask[]>((state) =>
-    tasksSelectors.selectAll(state.tasks)
-  );
-  const dispatch = useDispatch();
+interface ITaskList {
+  tasks: ITask[];
+  onToggleTaskCompleted: (task: ITask) => void;
+  onRemoveTask: (task: ITask) => void;
+}
 
+export const TaskList: React.FC<ITaskList> = ({
+  tasks,
+  onToggleTaskCompleted,
+  onRemoveTask,
+}) => {
   return (
       <ul className="mt-3">
-        {taskList.map((task) => {
-          const onToggleCompleted = () => {
-            try {
-              dispatch(
-                tasksActions.toggleTaskCompleted({
-                  taskId: task.id,
-                  completed: !task.completed,
-                })
-              );
-            } catch (e) {
-              alert(e.message);
-            }
-          };
+        {tasks.map((task) => {
+          const onToggleCompleted = () => onToggleTaskCompleted(task);
+          const onRemove = () => onRemoveTask(task);
           return (
             <li key={task.id} className="flex mb-4 items-center">
               {task.completed ? (
@@ -36,7 +30,7 @@ export const TaskList: React.FC = () => {
                 <button onClick={onToggleCompleted} type="button" className="flex-no-shrink p-2 ml-4 mr-2 border-2 rounded hover:text-white text-green-600 border-green-600 hover:bg-green-600 w-2/5">Done</button>
                 </>
               )}
-              <button onClick={() => dispatch(tasksActions.removeTask({ taskId: task.id }))} className="flex-no-shrink p-2 ml-2 border-2 rounded text-red-600 border-red-600 hover:text-white hover:bg-red-600 w-1/5">Remove</button>
+              <button onClick={onRemove} className="flex-no-shrink p-2 ml-2 border-2 rounded text-red-600 border-red-600 hover:text-white hover:bg-red-600 w-1/5">Remove</button>
             </li>
           );
         })}
