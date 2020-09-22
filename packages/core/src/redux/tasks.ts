@@ -27,6 +27,10 @@ interface CreateTaskPrepareActionPayload {
   deadline?: Date;
 }
 
+interface RemoveTaskActionPayload {
+  taskId: number;
+}
+
 interface CreateTaskActionPayload extends CreateTaskPrepareActionPayload {
   id: number;
 }
@@ -75,6 +79,9 @@ const tasks = createSlice({
         changes: toggleTaskCompletedInteractor(task, action.payload.completed),
       });
     },
+    removeTask: (state, action: PayloadAction<RemoveTaskActionPayload>) => {
+      tasksAdapter.removeOne(state, action.payload.taskId)
+    }
   },
   extraReducers: {
     [fetchUserTasks.fulfilled.type]: tasksAdapter.setAll,
